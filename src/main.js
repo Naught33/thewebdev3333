@@ -19,6 +19,7 @@ const footer = document.getElementsByClassName('footer')[0];
 const model = document.getElementsByTagName('spline-viewer')[0];
 const indicator = document.getElementById('indicator');
 const indicatorParent = document.getElementsByClassName('indicators')[0];
+const navs = document.getElementsByClassName('navs')[0];
 
 //form information
 
@@ -96,12 +97,14 @@ function positionModel(position){
 function openMenu(){
     document.getElementsByClassName('hamburger-menu')[0].style.opacity = 0;
     document.getElementsByClassName('close-menu')[0].style.opacity = 1;
+    navs.classList.remove('close-menu-items');
     isMenuOpen = true;
 }
 
 function closeMenu(){
     document.getElementsByClassName('hamburger-menu')[0].style.opacity = 1;
     document.getElementsByClassName('close-menu')[0].style.opacity = 0;
+    navs.classList.add('close-menu-items');
     isMenuOpen = false;
 }
 

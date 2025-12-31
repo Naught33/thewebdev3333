@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Year 2026 Countdown</title>
+  <style>
+    :root {
+      --background: #0a0a0a;
+      --foreground: #ffffff;
+      --accent: #ff3b30;
+      --font-serif: "Times New Roman", serif;
+      --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color 1s ease, color 1s ease;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--foreground);
+      font-family: var(--font-sans);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    /* Background Grid Pattern */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+      background-size: 40px 40px;
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 800px;
+      padding: 2rem;
+      z-index: 10;
+    }
+
+    /* added logo styling */
+    .logo {
+      max-width: 180px;
+      margin-bottom: 3rem;
+      filter: invert(0);
+    }
+
+    body.celebrate .logo {
+      filter: invert(1); /* Make it black on white mode */
+    }
+
+    .header {
+      font-family: var(--font-serif);
+      font-size: 0.875rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      color: var(--accent);
+      opacity: 0.9;
+    }
+
+    .timer {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      align-items: baseline;
+    }
+
+    .unit-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .value {
+      font-family: var(--font-serif);
+      font-size: clamp(4rem, 15vw, 10rem);
+      line-height: 1;
+      font-weight: 300;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .label {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-top: 0.5rem;
+    }
+
+    .separator {
+      font-family: var(--font-serif);
+      font-size: clamp(3rem, 10vw, 8rem);
+      line-height: 1;
+      font-weight: 200;
+      opacity: 0.2;
+      padding-bottom: 1.5rem;
+    }
+
+    .footer {
+      margin-top: 4rem;
+      font-size: 0.75rem;
+      opacity: 0.3;
+      letter-spacing: 0.05em;
+    }
+
+    /* Pulsing animation for the seconds or the accent line */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .pulsing {
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* styling for New Year state */
+    body.celebrate {
+      background-color: #ffffff;
+      color: #000000;
+    }
+
+    body.celebrate .header,
+    body.celebrate .separator,
+    body.celebrate .footer {
+      display: none;
+    }
+
+    #message {
+      display: none;
+      font-family: var(--font-serif);
+      font-size: clamp(3rem, 10vw, 6rem);
+      font-weight: 300;
+      line-height: 1.1;
+      animation: fadeInUp 1.5s ease-out forwards;
+    }
+
+    body.celebrate #message {
+      display: block;
+    }
+
+    body.celebrate .timer {
+      display: none;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Confetti Canvas */
+    #confetti {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    @media (max-width: 600px) {
+      .timer {
+        gap: 0.75rem;
+      }
+      .separator {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- added confetti canvas -->
+  <canvas id="confetti"></canvas>
+
+  <div class="container">
+    <!-- added logo -->
+    <img src="https://thewebdev3333.vercel.app/White_black_no_bg.png" alt="Logo" class="logo">
+    
+    <div id="countdown-content">
+      <div class="header pulsing">Countdown to 2026</div>
+      
+      <div class="timer">
+        <div class="unit-group">
+          <span id="days" class="value">00</span>
+          <span class="label">Days</span>
+        </div>
+        <span class="separator">:</span>
+        <div class="unit-group">
+          <span id="hours" class="value">00</span>
+          <span class="label">Hours</span>
+        </div>
+        
+        <span class="separator">:</span>
+        
+        <div class="unit-group">
+          <span id="minutes" class="value">00</span>
+          <span class="label">Minutes</span>
+        </div>
+        
+        <span class="separator">:</span>
+        
+        <div class="unit-group">
+          <span id="seconds" class="value">00</span>
+          <span class="label">Seconds</span>
+        </div>
+      </div>
+
+      <div class="footer">
+        TIME REMAINING UNTIL JANUARY 1ST, 2026
+      </div>
+    </div>
+
+    <!-- added happy new year message -->
+    <div id="message">Happy New Year 2026</div>
+  </div>
+
+  <script>
+    const targetDate = new Date('January 1, 2026 00:00:00').getTime();
+    let isCelebrated = false;
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        if (!isCelebrated) triggerCelebration();
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById('days').innerText = String(days).padStart(2, '0');
+      document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+      document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+      document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+    }
+
+    function triggerCelebration() {
+      isCelebrated = true;
+      document.body.classList.add('celebrate');
+      startConfetti();
+      console.log("[v0] New Year celebration triggered");
+    }
+
+    // Simple Confetti Animation
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function startConfetti() {
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+      
+      for (let i = 0; i < 150; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          size: Math.random() * 8 + 4,
+          color: `hsl(${Math.random() * 360}, 70%, 50%)`,
+          speed: Math.random() * 3 + 2,
+          angle: Math.random() * 6.28
+        });
+      }
+      animateConfetti();
+    }
+
+    function animateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.y += p.speed;
+        p.x += Math.sin(p.angle) * 2;
+        p.angle += 0.05;
+        
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, p.size, p.size);
+
+        if (p.y > canvas.height) p.y = -20;
+      });
+      requestAnimationFrame(animateConfetti);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>

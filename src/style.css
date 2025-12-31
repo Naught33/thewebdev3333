@@ -23,25 +23,32 @@ a{
 }
 
 body{
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100svh;
     background: linear-gradient(135deg, black,black, rgb(55, 55, 55));
     color: white;
     overflow-x: hidden;
     background-attachment: fixed;
 }
 
+body::-webkit-scrollbar{
+  display: none;
+}
+
+
 
 #app{
   overflow-y: auto;
   overflow-x: hidden;
-  height: 100vh;
+  height: 100svh;
+  width: 100%;
   scroll-snap-type: y mandatory;
 }
 
 #app::-webkit-scrollbar{
   display: none;
 }
+
 
 .hero, .services, .content, .footer{
   scroll-snap-align: start;
@@ -239,7 +246,7 @@ body::-webkit-scrollbar {
   }
 
   .hero{
-    height: 100vh;
+    height: 100svh;
   }
 
   .hero p, .hero h1{
@@ -299,8 +306,8 @@ spline-viewer{
 }
 
 .content,.services, .footer{
-  height: 100vh;
-  width: 96vw;
+  height: 100svh;
+  width: 100%;
   margin-top: 5px;
 }
 
@@ -420,7 +427,7 @@ spline-viewer{
 
 .footer{
   background: black;
-  width: 100vw;
+  width: 100svw;
   display: grid;
   grid-template-columns: 100px 100px 100px 100px 100px 100px 100px;
   grid-template-rows: 100px 100px 100px 100px 100px 100px;
@@ -563,6 +570,14 @@ spline-viewer{
 
 
 @media screen and (max-width: 600px){
+  body, #app{
+    width: 100%;
+  }
+
+  .services, .hero{
+    width: 100%;
+  }
+  
   .header img{
     width: 100px;
   }
@@ -573,6 +588,7 @@ spline-viewer{
 
   .header{
     width: 95%;
+
   }
 
 
@@ -593,7 +609,7 @@ spline-viewer{
 
   .close-menu{
     opacity: 0;
-  }
+    }
 
 
   .navs{
@@ -605,7 +621,14 @@ spline-viewer{
     height: 3.5rem;
     align-items: center;
     padding: 0;
+    transition: .6s;
   }
+
+    .close-menu-items{
+    opacity: 0;
+    top: 50px;
+    }
+
 
   .navs a{
     margin: 5px;
@@ -645,4 +668,43 @@ spline-viewer{
     gap: .5rem;
     width: 100vw;
   }
+
+  .content{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    }
+
+  .content .nothing{
+    display: none;
+  }
+
+  .content .about{
+    width: 50%;
+    overflow: auto;
+  }
+
+   .content .about:first-child{
+    margin-left: 5px;
+   }
+
+   .content .about:nth-child(2){
+    margin-right: 3px;
+   }
+   .service-cards{
+    overflow-x: auto;
+    padding-block: 4px;
+   }
+   .cto-buttons .hot{
+    text-align: center;
+   }
+
+   .hook p{
+    font-size: 1rem;
+    width: 90%;
+   }
+   .footer{
+    display: none;
+   }
+
 }
