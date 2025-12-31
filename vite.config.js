@@ -6,6 +6,14 @@ export default defineConfig({
         allowedHosts:[
             '0cf2c744d843.ngrok-free.app'
         ]
+    },
+    build: {
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+        newyear: 'newyear.html'
+      }
     }
+  }
     
 })
