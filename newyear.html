@@ -1,315 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>New Year 2026 Countdown</title>
-  <style>
-    :root {
-      --background: #0a0a0a;
-      --foreground: #ffffff;
-      --accent: #ff3b30;
-      --font-serif: "Times New Roman", serif;
-      --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy New Year!</title>
+<link rel="icon" href="./public/White_black_no_bg.png">
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      transition: background-color 1s ease, color 1s ease;
-    }
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&family=Roboto:wght@400;700&display=swap');
 
-    body {
-      background-color: var(--background);
-      color: var(--foreground);
-      font-family: var(--font-sans);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      overflow: hidden;
-      text-align: center;
-    }
+:root{
+  --primary-font: "Roboto", sans-serif;
+  --secondary-font: "Raleway", sans-serif;
+}
 
-    /* Background Grid Pattern */
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
-      background-size: 40px 40px;
-      z-index: -1;
-    }
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    .container {
-      max-width: 800px;
-      padding: 2rem;
-      z-index: 10;
-    }
+body{
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  background-image:
+    repeating-radial-gradient(circle at 0 0, transparent 0, #000 26px),
+    repeating-linear-gradient(#ffffff55, #ffffff);
+}
 
-    /* added logo styling */
-    .logo {
-      max-width: 180px;
-      margin-bottom: 3rem;
-      filter: invert(0);
-    }
+.container{
+  perspective: 1200px;
+}
 
-    body.celebrate .logo {
-      filter: invert(1); /* Make it black on white mode */
-    }
+.card{
+  width: 350px;
+  height: 250px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s ease;
+}
 
-    .header {
-      font-family: var(--font-serif);
-      font-size: 0.875rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      margin-bottom: 2rem;
-      color: var(--accent);
-      opacity: 0.9;
-    }
+.card.flipped{
+  transform: rotateY(180deg);
+}
 
-    .timer {
-      display: flex;
-      gap: 1.5rem;
-      justify-content: center;
-      align-items: baseline;
-    }
+.front, .back{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(8px);
+  background: rgba(0,0,0,0.35);
+  backface-visibility: hidden;
+}
 
-    .unit-group {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+.back{
+  transform: rotateY(180deg);
+}
 
-    .value {
-      font-family: var(--font-serif);
-      font-size: clamp(4rem, 15vw, 10rem);
-      line-height: 1;
-      font-weight: 300;
-      font-variant-numeric: tabular-nums;
-    }
+.card img{
+  height: 90px;
+  margin-bottom: 10px;
+}
 
-    .label {
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      opacity: 0.5;
-      margin-top: 0.5rem;
-    }
+h2{
+  font-family: var(--primary-font);
+  text-align: center;
+}
 
-    .separator {
-      font-family: var(--font-serif);
-      font-size: clamp(3rem, 10vw, 8rem);
-      line-height: 1;
-      font-weight: 200;
-      opacity: 0.2;
-      padding-bottom: 1.5rem;
-    }
+p{
+  font-family: var(--secondary-font);
+  font-size: 0.85rem;
+  text-align: center;
+  margin: 5px 10px;
+}
 
-    .footer {
-      margin-top: 4rem;
-      font-size: 0.75rem;
-      opacity: 0.3;
-      letter-spacing: 0.05em;
-    }
+button{
+  font-family: var(--secondary-font);
+  margin-top: 10px;
+  width: 90%;
+  height: 2.6rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  background: #000;
+  color: #fff;
+}
 
-    /* Pulsing animation for the seconds or the accent line */
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
-    }
+/* Toast */
+.toast{
+  position: fixed;
+  bottom: 20px;
+  background: #000;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-family: var(--secondary-font);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: .4s;
+}
 
-    .pulsing {
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    /* styling for New Year state */
-    body.celebrate {
-      background-color: #ffffff;
-      color: #000000;
-    }
-
-    body.celebrate .header,
-    body.celebrate .separator,
-    body.celebrate .footer {
-      display: none;
-    }
-
-    #message {
-      display: none;
-      font-family: var(--font-serif);
-      font-size: clamp(3rem, 10vw, 6rem);
-      font-weight: 300;
-      line-height: 1.1;
-      animation: fadeInUp 1.5s ease-out forwards;
-    }
-
-    body.celebrate #message {
-      display: block;
-    }
-
-    body.celebrate .timer {
-      display: none;
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Confetti Canvas */
-    #confetti {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    @media (max-width: 600px) {
-      .timer {
-        gap: 0.75rem;
-      }
-      .separator {
-        display: none;
-      }
-    }
-  </style>
+.toast.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
 </head>
+
 <body>
-  <!-- added confetti canvas -->
-  <canvas id="confetti"></canvas>
 
-  <div class="container">
-    <!-- added logo -->
-    <img src="https://thewebdev3333.vercel.app/White_black_no_bg.png" alt="Logo" class="logo">
-    
-    <div id="countdown-content">
-      <div class="header pulsing">Countdown to 2026</div>
-      
-      <div class="timer">
-        <div class="unit-group">
-          <span id="days" class="value">00</span>
-          <span class="label">Days</span>
-        </div>
-        <span class="separator">:</span>
-        <div class="unit-group">
-          <span id="hours" class="value">00</span>
-          <span class="label">Hours</span>
-        </div>
-        
-        <span class="separator">:</span>
-        
-        <div class="unit-group">
-          <span id="minutes" class="value">00</span>
-          <span class="label">Minutes</span>
-        </div>
-        
-        <span class="separator">:</span>
-        
-        <div class="unit-group">
-          <span id="seconds" class="value">00</span>
-          <span class="label">Seconds</span>
-        </div>
-      </div>
-
-      <div class="footer">
-        TIME REMAINING UNTIL JANUARY 1ST, 2026
-      </div>
+<div class="container">
+  <div class="card" id="card">
+    <div class="front">
+      <img src="/public/White_black_no_bg.png" alt="logo">
+      <h2>Hello and welcome</h2>
+      <p>
+        We are excited to launch our cyber services this year.
+        Click the button below to reveal your gift 🎁
+      </p>
+      <button id="revealBtn">Reveal Your Gift!</button>
     </div>
 
-    <!-- added happy new year message -->
-    <div id="message">Happy New Year 2026</div>
+    <div class="back">
+      <img src="/public/White_black_no_bg.png" alt="logo">
+      <h2 id="giftText"></h2>
+      <p>Valid until end of January</p>
+      <p>Take a screenshot of this message</p>
+    </div>
   </div>
+</div>
 
-  <script>
-    const targetDate = new Date('January 1, 2026 00:00:00').getTime();
-    let isCelebrated = false;
+<div class="toast" id="toast"></div>
 
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const diff = targetDate - now;
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-      if (diff <= 0) {
-        if (!isCelebrated) triggerCelebration();
-        return;
-      }
+const firebaseConfig = {
+  apiKey: "AIzaSyDlkV1RV57HiswLQSc9En7glOfypAdL2gU",
+  authDomain: "thewebdevcyber.firebaseapp.com",
+  databaseURL: "https://thewebdevcyber-default-rtdb.firebaseio.com",
+  projectId: "thewebdevcyber",
+  storageBucket: "thewebdevcyber.firebasestorage.app",
+  messagingSenderId: "749003737236",
+  appId: "1:749003737236:web:6e93df78669a3c8d2acc81"
+};
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const DEV_MODE = false;
 
-      document.getElementById('days').innerText = String(days).padStart(2, '0');
-      document.getElementById('hours').innerText = String(hours).padStart(2, '0');
-      document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
-      document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
-    }
+/* Gift pools (weighted) */
+const rareGifts = [
+  "First printing is free!",
+  "First Scanning is Free",
+  "Free First Photocopy",
+  "Free first Graphics Design"
+];
 
-    function triggerCelebration() {
-      isCelebrated = true;
-      document.body.classList.add('celebrate');
-      startConfetti();
-      console.log("[v0] New Year celebration triggered");
-    }
+const commonGifts = [
+  "30% off any Website",
+  "50% off first Printing",
+  "50% off first Photocopy",
+  "50% off Windows Installation",
+  "50% off Microsoft Office Installation"
+];
 
-    // Simple Confetti Animation
-    const canvas = document.getElementById('confetti');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
+function fireConfetti(){
+  confetti({
+    particleCount: 160,
+    spread: 90,
+    origin: { y: 0.6 }
+  });
 
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
+  // second softer burst
+  setTimeout(() => {
+    confetti({
+      particleCount: 80,
+      spread: 120,
+      startVelocity: 25,
+      origin: { y: 0.7 }
+    });
+  }, 250);
+}
 
-    function startConfetti() {
-      resizeCanvas();
-      window.addEventListener('resize', resizeCanvas);
-      
-      for (let i = 0; i < 150; i++) {
-        particles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height - canvas.height,
-          size: Math.random() * 8 + 4,
-          color: `hsl(${Math.random() * 360}, 70%, 50%)`,
-          speed: Math.random() * 3 + 2,
-          angle: Math.random() * 6.28
-        });
-      }
-      animateConfetti();
-    }
 
-    function animateConfetti() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.y += p.speed;
-        p.x += Math.sin(p.angle) * 2;
-        p.angle += 0.05;
-        
-        ctx.fillStyle = p.color;
-        ctx.fillRect(p.x, p.y, p.size, p.size);
+function generateGift(){
+  // 20% chance for free gift
+  const isRare = Math.random() < 0.2;
+  const pool = isRare ? rareGifts : commonGifts;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
 
-        if (p.y > canvas.height) p.y = -20;
-      });
-      requestAnimationFrame(animateConfetti);
-    }
+function generateUID(){
+  return `${Date.now()}-${crypto.getRandomValues(new Uint32Array(1))[0]}`;
+}
 
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-  </script>
+function showToast(msg){
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"), 3500);
+}
+
+const revealBtn = document.getElementById("revealBtn");
+const card = document.getElementById("card");
+const giftText = document.getElementById("giftText");
+
+revealBtn.onclick = async () => {
+  if(!DEV_MODE && localStorage.getItem("gift_claimed")){
+    showToast("❌ Gift already claimed. One per person.");
+    return;
+  }
+
+  if(DEV_MODE){
+  console.warn("DEV MODE ENABLED — gift restrictions bypassed");
+  localStorage.removeItem("gift_claimed");
+  localStorage.removeItem("gift_id");
+}
+
+  const gift = generateGift();
+  const uid = generateUID();
+
+  giftText.textContent = gift;
+  card.classList.add("flipped");
+  fireConfetti();
+
+
+  localStorage.setItem("gift_claimed", "true");
+  localStorage.setItem("gift_id", uid);
+
+  await set(ref(db, "gifts/" + uid), {
+    gift,
+    timestamp: Date.now()
+  });
+
+  showToast("🎉 Gift received successfully!");
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+
 </body>
 </html>
